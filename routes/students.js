@@ -59,6 +59,10 @@ ruta.delete('/:id', (req, res) => {
         return;
     }
     if(reg.students.delete(req.params.id)){
+        //Eliminar Alumno de Eventos 
+        for(var i = 0; i < reg.events.events.length; i++){
+            reg.events.events[i].deleteStudent(Number(req.params.id));
+        }
         res.send("Eliminado Correctamente");
     }
     return;

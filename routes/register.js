@@ -138,13 +138,23 @@ class Event{
     }
 
     addStudent(id_student){
-        this.students.push(id_student);
-        return true;
+        //Comprobar Alumno No Agregado 
+        if(this.students.indexOf(id_student) == -1){
+            this.students.push(id_student);
+            return true;
+        }else{
+            return false;
+        }
     }
 
     deleteStudent(id_student){
-        this.students.splice(this.students.indexOf(id_student), 1);
-        return true;
+        //Comprobar Alumno Agregado
+        if(this.students.indexOf(id_student != -1)){
+            this.students.splice(this.students.indexOf(id_student), 1);
+            return true;
+        }else{
+            return false;
+        }
     }
 }
 

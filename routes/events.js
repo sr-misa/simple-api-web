@@ -16,6 +16,20 @@ ruta.get('/:id', (req, res) => {
     }
 });
 
+//Ver Estudiante en Evento
+ruta.get('/:id_e/:id_s', (req, res) => {
+    let [check, index] = reg.events.checkID(req.params.id_e);
+    if(check){
+        if(reg.events.read(req.params.id_e)[6].indexOf(Number(req.params.id_s)) != -1){
+            res.send(reg.students.read(Number(req.params.id_s)));
+        }else{
+            res.status(404).send('Estudiante no se encuentra');
+        }
+    }else{
+        res.status(404).send('Evento no se encuentra');
+    }
+});
+
 //POST
 //event: id, title, date, hour, place, speaker name, and list of registered students
 ruta.post('/', (req, res) => {
@@ -29,6 +43,25 @@ ruta.post('/', (req, res) => {
     }
     else{
         res.status(400).send(error.details[0].message);
+    }
+});
+
+//Agregar Estudiante a Evento
+ruta.post('/:id_e/:id_s', (req, res) => {
+    let [check, index] = reg.students.checkID(req.params.id_s);
+    if(check){
+        [check, index] = reg.events.checkID(req.params.id_e);
+        if(check){
+            if(reg.events.events[index].addStudent(Number(req.params.id_s))){
+                res.send("Agregado Correctamente");
+            }else{
+                res.send("Alumno YA está en el evento");
+            }
+        }else{
+            res.send("Error. Evento no se encuentra");
+        }
+    }else{
+        res.send("Error. Estudiante no se encuentra");
     }
 });
 
@@ -63,6 +96,25 @@ ruta.delete('/:id', (req, res) => {
         res.send("Eliminado Correctamente");
     }
     return;
+});
+
+//Eliminar Alumno de Evento
+ruta.delete('/:id_e/:id_s', (req, res) => {
+    let [check, index] = reg.students.checkID(req.params.id_s);
+    if(check){
+        [check, index] = reg.events.checkID(req.params.id_e);
+        if(check){
+            if(reg.events.events[index].deleteStudent(Number(req.params.id_s))){
+                res.send("Eliminado Correctamente");
+            }else{
+                res.send("Alumno NO está en el evento, no se puede eliminar");
+            }
+        }else{
+            res.send("Error. Evento no se encuentra");
+        }
+    }else{
+        res.send("Error. Estudiante no se encuentra");
+    }
 });
 
 //EXPORTAR RUTAS
