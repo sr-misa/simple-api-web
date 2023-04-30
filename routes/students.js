@@ -5,7 +5,7 @@ const reg = require('./register');
 //GET
 ruta.get('/', (req, res) => {
     res.send(reg.students.students);
-})
+});
 
 ruta.get('/:id', (req, res) => {
     let [check, index] = reg.students.checkID(req.params.id);
@@ -14,7 +14,7 @@ ruta.get('/:id', (req, res) => {
     }else{
         res.status(404).send('Usuario no se encuentra');
     }
-})
+});
 
 //POST
 ruta.post('/', (req, res) => {
